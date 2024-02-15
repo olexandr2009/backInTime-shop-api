@@ -1,0 +1,7 @@
+ACTIVE_PROFILE=prod
+DB_URL=jdbc:mysql://db:3306/backintimedb
+DB_PASSWORD=test
+DB_OUTSIDE_PORT=3306
+DB_INSIDE_PORT=3306
+DB_NAME=backintimedb
+DB_USER_NAME=test
