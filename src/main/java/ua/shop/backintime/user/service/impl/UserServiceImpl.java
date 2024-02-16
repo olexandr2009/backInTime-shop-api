@@ -19,10 +19,12 @@ import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
+import ua.shop.backintime.user.service.exception.UserIsOnlineException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -42,7 +44,22 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
 
+        checkIsUserOnlineNow(user);
+        user.setLastLoginDateTime(LocalDateTime.now());
+
         return UserDetailsImpl.build(user);
+    }
+    private void checkIsUserOnlineNow(UserEntity user) {
+        LocalDateTime lastLoginDateTime = user.getLastLoginDateTime();
+        if (lastLoginDateTime == null){
+            return;
+        }
+
+        boolean isOnlineNow = lastLoginDateTime.plusMinutes(10).isAfter(LocalDateTime.now());
+
+        if (isOnlineNow) {
+            throw new UserIsOnlineException(user.getEmail());
+        }
     }
 
     @Override
@@ -61,7 +78,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private UserEntity mapUserDto(UserDto userDto, String password) {
-        return new UserEntity(userDto.getFirstName(),userDto.getLastName(),userDto.getEmail(), password);
+        return new UserEntity(userDto.getFirstName(),userDto.getLastName(),userDto.getEmail(), encoder.encode(password));
     }
 
     @Override

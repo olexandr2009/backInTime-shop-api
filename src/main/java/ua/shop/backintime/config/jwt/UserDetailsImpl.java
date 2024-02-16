@@ -39,7 +39,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public UserDetailsImpl(Long id, String firstName, String lastName, String email,String password,
+    public UserDetailsImpl(Long id, String firstName, String lastName, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
@@ -66,7 +66,6 @@ public class UserDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-
 
 
     @Override

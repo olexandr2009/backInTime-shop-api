@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,9 @@ public class UserEntity {
     private String password;
 
     @Setter
+    private LocalDateTime lastLoginDateTime;
+
+    @Setter
     private LocalDate lastUpdatedDate;
 
     @CreatedDate
@@ -46,7 +50,6 @@ public class UserEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
-
 
     public UserEntity(String firstName, String lastName, String email, String password) {
         if (firstName == null || email == null || password == null){
