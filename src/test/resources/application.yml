@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:alpine://testDb
+  jpa:
+    show-sql: true
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+demo:
+  app:
+    jwtSecret: ======================SecretWordForJwt===========================
+    jwtExpirationMs: 86400000

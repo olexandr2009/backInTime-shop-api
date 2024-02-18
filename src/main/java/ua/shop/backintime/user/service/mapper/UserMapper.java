@@ -1,6 +1,6 @@
 package ua.shop.backintime.user.service.mapper;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ua.shop.backintime.user.RoleEntity;
 import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.controller.request.UpdateUserRequest;
@@ -10,7 +10,7 @@ import ua.shop.backintime.user.service.dto.UserDto;
 
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class UserMapper {
 
     public UserDto toUserDto(UserEntity user) {
@@ -28,12 +28,8 @@ public class UserMapper {
 
     public UpdateUserDto toUpdateUserDto(UpdateUserRequest request) {
         UpdateUserDto dto = new UpdateUserDto();
-        dto.setOldFirstName(request.getOldFirstName());
-        dto.setOldLastName(request.getOldLastName());
         dto.setOldPassword(request.getOldPassword());
         dto.setOldEmail(request.getOldEmail());
-        dto.setNewFirstName(request.getNewFirstName());
-        dto.setNewLastName(request.getNewLastName());
         dto.setNewPassword(request.getNewPassword());
         dto.setNewEmail(request.getNewEmail());
         return dto;

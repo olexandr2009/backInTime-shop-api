@@ -11,13 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.shop.backintime.config.jwt.JwtUtils;
 import ua.shop.backintime.config.jwt.UserDetailsImpl;
 import ua.shop.backintime.user.controller.request.UpdateUserRequest;
 import ua.shop.backintime.user.controller.response.UserResponse;
@@ -28,13 +25,14 @@ import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 
+import java.security.Principal;
+
 @Slf4j
 @Tag(name = "Users", description = "User controller to manage usernames, passwords and roles")
 @RestController
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
     @Autowired private UserService userService;
-    @Autowired private JwtUtils jwtUtils;
     @Autowired private UserMapper userMapper;
 
     @Operation(
@@ -56,10 +54,9 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Unauthorized authorize in Authentication login")
     })
     @PutMapping("/update")
-    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest)
+    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest, Principal principal)
             throws UserNotFoundException, UserAlreadyExistException, UserIncorrectPasswordException {
-        SecurityContext context = SecurityContextHolder.getContext();
-        UserDetailsImpl authentication = (UserDetailsImpl) context.getAuthentication().getPrincipal();
+        UserDetailsImpl authentication = (UserDetailsImpl) principal;
         return ResponseEntity.ok(userMapper.toUserResponse(
                 userService.updateUser(authentication.getId(), userMapper.toUpdateUserDto(updateUserRequest))));
     }

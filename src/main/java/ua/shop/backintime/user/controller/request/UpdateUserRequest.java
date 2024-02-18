@@ -11,14 +11,6 @@ import lombok.Setter;
 public class UpdateUserRequest {
 
     @NotBlank
-    @Size(min = 3, max = 50)
-    private String oldFirstName;
-
-    @NotBlank
-    @Size(min = 3, max = 50)
-    private String oldLastName;
-
-    @NotBlank
     @Size(min = 3, max = 100)
     private String oldPassword;
 
@@ -26,13 +18,6 @@ public class UpdateUserRequest {
     @Email
     private String oldEmail;
 
-    @NotBlank
-    @Size(min = 3, max = 50)
-    private String newFirstName;
-
-    @NotBlank
-    @Size(min = 3, max = 50)
-    private String newLastName;
 
     @NotBlank
     @Size(min = 3, max = 100)

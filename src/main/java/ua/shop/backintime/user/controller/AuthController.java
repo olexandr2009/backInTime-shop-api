@@ -28,12 +28,13 @@ import ua.shop.backintime.user.service.UserService;
 import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Tag(name = "Authentication", description = "Authentication controller to get JWT token")
 @RestController
-@RequestMapping(path = "/api/V1/auth")
+@RequestMapping(path = "/api/v1/auth")
 public class AuthController {
     @Autowired private AuthenticationManager authenticationManager;
     @Autowired private UserService userService;
@@ -54,21 +55,39 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "Cannot login")
     })
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(), loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+            return ResponseEntity
+                    .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getFirstName(),userDetails.getLastName(), userDetails.getEmail(), roles));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
-        return ResponseEntity
-                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getFirstName(),userDetails.getLastName(), userDetails.getEmail(), roles));
+    @Operation(
+            summary = "Logout user",
+            description = "Logout user",
+            tags = {"Authentication"}
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Logout success"),
+            @ApiResponse(responseCode = "400", description = "User is not logged in")
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(Principal principal) {
+        userService.logout(principal);
+        return ResponseEntity.ok("Logout success");
     }
 
     @Operation(
@@ -86,6 +105,7 @@ public class AuthController {
         userDto.setEmail(signUpRequest.getEmail());
         userDto.setFirstName(signUpRequest.getFirstName());
         userDto.setLastName(signUpRequest.getLastName());
+
 
         userService.registerUser(userDto, signUpRequest.getPassword());
         return ResponseEntity.accepted().build();

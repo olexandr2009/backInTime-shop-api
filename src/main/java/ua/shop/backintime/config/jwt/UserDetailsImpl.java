@@ -32,13 +32,6 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username,
-                           Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.lastName = username;
-        this.authorities = authorities;
-    }
-
     public UserDetailsImpl(Long id, String firstName, String lastName, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;

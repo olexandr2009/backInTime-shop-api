@@ -27,7 +27,7 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setId(userPrincipal.getId().toString())
-                .setSubject((userPrincipal.getLastName()))
+                .setSubject((userPrincipal.getEmail()))
                 .claim("Authorities", userPrincipal.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
@@ -45,7 +45,7 @@ public class JwtUtils {
         return Objects.nonNull(id) ? Long.parseLong(id) : null;
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    public String getUserEmailFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }

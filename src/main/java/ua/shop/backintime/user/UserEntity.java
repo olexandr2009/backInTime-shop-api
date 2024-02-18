@@ -30,9 +30,11 @@ public class UserEntity {
     private String lastName;
 
     @NotBlank
+    @Setter
     private String email;
 
     @NotBlank
+    @Setter
     private String password;
 
     @Setter
@@ -52,13 +54,26 @@ public class UserEntity {
     private Set<RoleEntity> roles = new HashSet<>();
 
     public UserEntity(String firstName, String lastName, String email, String password) {
-        if (firstName == null || email == null || password == null){
-            throw new NullPointerException("Cannot create user entity");
+        if (firstName == null || lastName == null ||email == null || password == null){
+            throw new NullPointerException(
+                    "Cannot create user entity firstname=%s , lastname=%s,email =%s, password=%s"
+                            .formatted(firstName, lastName, email, password));
         }
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        checkPassword(password);
         this.password = password;
+    }
+    private void checkPassword(String password) {
+        if (password.length() < 8) {
+            throw new RuntimeException("Password is incorect" + password);
+
+        }
+        if (password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")){
+            return;
+        }
+        throw new RuntimeException("Password is incorect " + password);
     }
 }

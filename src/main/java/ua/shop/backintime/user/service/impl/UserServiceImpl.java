@@ -23,10 +23,10 @@ import ua.shop.backintime.user.service.exception.UserIsOnlineException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public void registerUser(UserDto userDto, String password) throws UserAlreadyExistException {
+    public void registerUser(UserDto userDto, String password) {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new UserAlreadyExistException(userDto);
         }
@@ -90,12 +90,21 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if (userRepository.existsByEmail(updateUserDto.getNewEmail())) {
             throw new UserAlreadyExistException(updateUserDto);
         }
-        if (user.getPassword().equals(encoder.encode(user.getPassword())) &&
-                Objects.nonNull(userId) && userId.equals(user.getId())) {
+        if (encoder.matches(updateUserDto.getOldPassword(), user.getPassword())) {
+            user.setEmail(updateUserDto.getNewEmail());
+            user.setPassword(encoder.encode(updateUserDto.getNewPassword()));
             user.setLastUpdatedDate(LocalDate.now());
             return userMapper.toUserDto(userRepository.save(user));
         } else {
-            throw new UserIncorrectPasswordException(updateUserDto.getOldFirstName());
+            throw new UserIncorrectPasswordException(updateUserDto.getOldEmail());
         }
+    }
+
+    @Override
+    public void logout(Principal principal) {
+        UserEntity userEntity = userRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new UserNotFoundException(principal.getName()));
+        userEntity.setLastLoginDateTime(null);
+        userRepository.save(userEntity);
     }
 }
