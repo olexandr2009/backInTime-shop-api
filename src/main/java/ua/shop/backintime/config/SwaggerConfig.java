@@ -19,8 +19,8 @@ import org.springframework.context.annotation.Configuration;
 )
 @OpenAPIDefinition(
         info = @Info(
-                title = "Open source Url shorter Api",
-                description = "Url shorter Api like bit.ly",
+                title = "Open source Shop api",
+                description = "Shop Api",
                 version = "V1",
                 contact = @Contact(
                         name = "Olexandr Khrystevich",
@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
                 )
         ),
         servers = @Server(
-                url = "http://localhost:8080"
+                url = "http://localhost:80"
         ),
         security = {
                 @SecurityRequirement(

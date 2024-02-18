@@ -41,7 +41,7 @@ class JwtUtilsTest {
     }
 
     @Test
-    void testGetUserNameFromJwtToken() {
+    void testGetUserEmailFromJwtToken() {
         assertEquals(email, jwtUtils.getUserEmailFromJwtToken(jwtToken));
     }
 
