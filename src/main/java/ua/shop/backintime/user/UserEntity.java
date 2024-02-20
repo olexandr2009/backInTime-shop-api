@@ -38,16 +38,16 @@ public class UserEntity {
     private String password;
 
     @Setter
-    private LocalDateTime lastLoginDateTime;
+    private LocalDateTime lastLoginDateTime = LocalDateTime.now();
 
     @Setter
-    private LocalDate lastUpdatedDate;
+    private LocalDate lastUpdatedDate = LocalDate.now();
 
     @CreatedDate
     @Setter
-    private LocalDate createdDate;
+    private LocalDate createdDate = LocalDate.now();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Setter
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

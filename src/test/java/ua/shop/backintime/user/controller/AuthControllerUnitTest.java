@@ -19,7 +19,6 @@ import ua.shop.backintime.user.controller.auth.response.JwtResponse;
 import ua.shop.backintime.user.service.UserService;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;

@@ -18,6 +18,7 @@ import ua.shop.backintime.user.service.mapper.UserMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @WebMvcTest(UserController.class)
@@ -53,6 +54,12 @@ public class UserControllerUnitTest {
                         .content(toJson(null)))
                 .andReturn().getResponse().getStatus();
         assertEquals(400, status);
+    }
+    @Test
+    @WithMockUser
+    void testFindAll() throws Exception {
+        int status = mvc.perform(get("/api/v1/users/find/all")).andReturn().getResponse().getStatus();
+        assertEquals(200, status);
     }
     private UpdateUserDto newTestUpdateUserDto() {
         UpdateUserDto updateUserDto = new UpdateUserDto();

@@ -7,8 +7,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: backintimeshopdb
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
     env_file:
       - .env

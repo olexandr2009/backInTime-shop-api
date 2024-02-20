@@ -1,0 +1,39 @@
+spring:
+  # Prod profile configuration
+  # PostgreSQL Configuration
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/backintimeshopdb
+    username: dev
+    password: dev
+
+  # JPA and Hibernate setup for PostgreSQL
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+# Swagger Configuration
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /swagger-ui.html
+
+# Server Port
+server:
+  port: 80
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:your_prod_secret_key}
+  expiration-time: ${JWT_EXPIRATION_TIME:86400000}
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+demo:
+  app:
+    jwtSecret: ======================SecretWordForJwt===========================
+    jwtExpirationMs: 86400000

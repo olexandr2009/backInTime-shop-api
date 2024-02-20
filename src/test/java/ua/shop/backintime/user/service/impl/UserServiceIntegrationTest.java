@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.repository.UserRepository;
 import ua.shop.backintime.user.service.UserService;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
@@ -11,6 +12,10 @@ import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
+import ua.shop.backintime.user.service.mapper.UserMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserServiceIntegrationTest {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     private UserRepository userRepository;
 
@@ -68,6 +75,30 @@ public class UserServiceIntegrationTest {
         userService.registerUser(newUserDto(updateUserDto.getOldEmail()), "null");
         assertThrows(UserIncorrectPasswordException.class, () -> userService.updateUser(1L, updateUserDto));
     }
+
+    @Test
+    void testFindAllIsEmpty() {
+        List<UserDto> all = userService.findAll();
+        assertEquals(new ArrayList<>(), all);
+    }
+    @Test
+    void testFindAll() {
+        UserEntity entity = new UserEntity("firstname", "lastname", "email", "paSSword1");
+        UserDto saved = userMapper.toUserDto(userRepository.save(entity));
+
+        assertTrue(List.of(saved).equals(userService.findAll()));
+    }
+    @Test
+    void testFindByEmailNonExist() {
+        assertThrows(UserNotFoundException.class, () -> userService.findByEmail("email@example.com"));
+    }
+    @Test
+    void testFindByEmail() {
+        UserEntity entity = new UserEntity("firstname", "lastname", "email@example.com", "paSSword1");
+        UserDto expected = userMapper.toUserDto(userRepository.save(entity));
+        assertTrue(expected.equals(userService.findByEmail("email@example.com")));
+    }
+
 
     private static UserDto newUserDto(String email) {
         UserDto userDto = new UserDto();
