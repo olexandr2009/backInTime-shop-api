@@ -7,6 +7,7 @@ import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 
 import java.security.Principal;
+import java.util.List;
 
 public interface UserService {
     void registerUser(UserDto userDto, String password);
@@ -15,4 +16,8 @@ public interface UserService {
             throws UserNotFoundException, UserIncorrectPasswordException, UserAlreadyExistException;
 
     void logout(Principal principal);
+
+    List<UserDto> findAll();
+
+    UserDto findByEmail(String email);
 }

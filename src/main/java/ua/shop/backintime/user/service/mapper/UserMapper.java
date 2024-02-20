@@ -8,6 +8,7 @@ import ua.shop.backintime.user.controller.response.UserResponse;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,5 +46,19 @@ public class UserMapper {
         response.setCreatedDate(dto.getCreatedDate());
         response.setRoles(dto.getRoles());
         return response;
+    }
+
+    public List<UserResponse> toUserResponses(List<UserDto> dtos) {
+        if (dtos == null){
+            return null;
+        }
+        return dtos.stream().map(this::toUserResponse).toList();
+    }
+
+    public List<UserDto> toUserDtos(List<UserEntity> entities) {
+        if (entities == null){
+            return null;
+        }
+        return entities.stream().map(this::toUserDto).toList();
     }
 }

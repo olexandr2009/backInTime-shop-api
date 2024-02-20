@@ -27,6 +27,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -106,5 +107,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .orElseThrow(() -> new UserNotFoundException(principal.getName()));
         userEntity.setLastLoginDateTime(null);
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public List<UserDto> findAll() {
+        return userMapper.toUserDtos(userRepository.findAll());
+    }
+
+    @Override
+    public UserDto findByEmail(String email) {
+        return userMapper.toUserDto(userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email)));
     }
 }
