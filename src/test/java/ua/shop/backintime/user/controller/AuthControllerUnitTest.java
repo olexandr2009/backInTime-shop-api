@@ -46,7 +46,7 @@ public class AuthControllerUnitTest {
     void testAuthenticateUser() {
         String testToken = "JSDGGHFVHFJHSFTYHJDJG24VGHV";
         when(authenticationManager.authenticate(any()))
-                .thenReturn(new UsernamePasswordAuthenticationToken(new UserDetailsImpl(1l, "", "","","",List.of()), ""));
+                .thenReturn(new UsernamePasswordAuthenticationToken(new UserDetailsImpl(1L, "", "","","",List.of()), ""));
         when(jwtUtils.generateJwtToken(any()))
                 .thenReturn(testToken);
 
