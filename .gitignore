@@ -44,3 +44,5 @@ out/
 *.iml
 *.ipr
 *.iws
+
+secrets/
