@@ -86,6 +86,9 @@ public class AuthController {
     })
     @PostMapping("/logout")
     public ResponseEntity<?> logout(Principal principal) {
+        if (principal == null){
+            return ResponseEntity.badRequest().body("You are not logged yet");
+        }
         userService.logout(principal);
         return ResponseEntity.ok("Logout success");
     }
