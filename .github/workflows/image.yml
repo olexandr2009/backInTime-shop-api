@@ -1,7 +1,7 @@
 name: Create Docker Image
 
 on:
-  merge:
+  push:
     branches:
       - testProd
 
