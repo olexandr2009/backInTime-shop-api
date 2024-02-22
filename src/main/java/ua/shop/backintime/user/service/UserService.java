@@ -17,7 +17,4 @@ public interface UserService {
 
     void logout(Principal principal);
 
-    List<UserDto> findAll();
-
-    UserDto findByEmail(String email);
 }

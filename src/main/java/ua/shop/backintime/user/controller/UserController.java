@@ -60,49 +60,4 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toUserResponse(
                 userService.updateUser(authentication.getId(), userMapper.toUpdateUserDto(updateUserRequest))));
     }
-
-    @Operation(
-            summary = "Find all users",
-            description = "Find all users",
-            tags = {"Users"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",
-                    description = "Users found",
-                    content = @Content(
-                            schema = @Schema(implementation = List.class),
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-                    )
-            ),
-    })
-    @GetMapping("/find/all")
-    public ResponseEntity<List<UserResponse>> findAll() {
-        return ResponseEntity.ok(userMapper.toUserResponses(userService.findAll()));
-    }
-
-    @Operation(
-            summary = "Find by email",
-            description = "Find by email",
-            tags = {"Users"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",
-                    description = "User found",
-                    content = @Content(
-                            schema = @Schema(implementation = List.class),
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-                    )
-            ),
-            @ApiResponse(responseCode = "404",
-                    description = "User not found"
-            )
-    })
-    @GetMapping("/find/{email}")
-    public ResponseEntity<UserResponse> findByEmail(@PathVariable String email) {
-        try {
-            return ResponseEntity.ok(userMapper.toUserResponse(userService.findByEmail(email)));
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }

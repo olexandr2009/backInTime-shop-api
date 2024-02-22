@@ -76,30 +76,6 @@ public class UserServiceIntegrationTest {
         assertThrows(UserIncorrectPasswordException.class, () -> userService.updateUser(1L, updateUserDto));
     }
 
-    @Test
-    void testFindAllIsEmpty() {
-        List<UserDto> all = userService.findAll();
-        assertEquals(new ArrayList<>(), all);
-    }
-    @Test
-    void testFindAll() {
-        UserEntity entity = new UserEntity("firstname", "lastname", "email", "paSSword1");
-        UserDto saved = userMapper.toUserDto(userRepository.save(entity));
-
-        assertTrue(List.of(saved).equals(userService.findAll()));
-    }
-    @Test
-    void testFindByEmailNonExist() {
-        assertThrows(UserNotFoundException.class, () -> userService.findByEmail("email@example.com"));
-    }
-    @Test
-    void testFindByEmail() {
-        UserEntity entity = new UserEntity("firstname", "lastname", "email@example.com", "paSSword1");
-        UserDto expected = userMapper.toUserDto(userRepository.save(entity));
-        assertTrue(expected.equals(userService.findByEmail("email@example.com")));
-    }
-
-
     private static UserDto newUserDto(String email) {
         UserDto userDto = new UserDto();
         userDto.setFirstName("firstName");

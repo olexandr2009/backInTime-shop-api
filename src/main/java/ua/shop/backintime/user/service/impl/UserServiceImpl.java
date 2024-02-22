@@ -108,15 +108,4 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userEntity.setLastLoginDateTime(null);
         userRepository.save(userEntity);
     }
-
-    @Override
-    public List<UserDto> findAll() {
-        return userMapper.toUserDtos(userRepository.findAll());
-    }
-
-    @Override
-    public UserDto findByEmail(String email) {
-        return userMapper.toUserDto(userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email)));
-    }
 }
