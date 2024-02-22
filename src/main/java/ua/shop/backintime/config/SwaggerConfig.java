@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
                 )
         ),
         servers = @Server(
-                url = "http://localhost:80"
+                url = "https://backintimeshopapitest-1-0.onrender.com"
         ),
         security = {
                 @SecurityRequirement(
