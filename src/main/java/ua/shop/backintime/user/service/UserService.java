@@ -6,7 +6,6 @@ import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 
-import java.security.Principal;
 import java.util.List;
 
 public interface UserService {
@@ -15,9 +14,13 @@ public interface UserService {
     UserDto updateUser(Long userId, UpdateUserDto updateUserDto)
             throws UserNotFoundException, UserIncorrectPasswordException, UserAlreadyExistException;
 
-    void logout(Principal principal);
-
     List<UserDto> findAll();
 
     UserDto findByEmail(String email);
+
+    void setLoggout(String email);
+
+    void login(String email, String token);
+
+    boolean canLogin(String email, String jwt);
 }

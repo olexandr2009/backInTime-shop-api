@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -64,6 +65,8 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateJwtToken(authentication);
 
+            userService.login(loginRequest.getEmail(), jwt);
+
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
@@ -86,7 +89,11 @@ public class AuthController {
     })
     @PostMapping("/logout")
     public ResponseEntity<?> logout(Principal principal) {
-        userService.logout(principal);
+        System.out.println(principal);
+        if (principal == null){
+            return ResponseEntity.badRequest().body("User is not logged in");
+        }
+        userService.setLoggout(principal.getName());
         return ResponseEntity.ok("Logout success");
     }
 
@@ -96,7 +103,7 @@ public class AuthController {
             tags = {"Authentication"}
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "202"),
+            @ApiResponse(responseCode = "201"),
             @ApiResponse(responseCode = "400", description = "User already exists")
     })
     @PostMapping("/register")
@@ -108,6 +115,6 @@ public class AuthController {
 
 
         userService.registerUser(userDto, signUpRequest.getPassword());
-        return ResponseEntity.accepted().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

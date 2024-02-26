@@ -1,4 +1,4 @@
-package ua.shop.backintime.config;
+package ua.shop.backintime.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.annotations.servers.Server;
-import org.springframework.context.annotation.Configuration;
 
 @SecurityScheme(
         name = "bearerAuth",
@@ -27,9 +25,6 @@ import org.springframework.context.annotation.Configuration;
                         email = "hristevich.ua@gmail.com"
                 )
         ),
-        servers = @Server(
-                url = "https://backintimeshopapitest-1-0.onrender.com"
-        ),
         security = {
                 @SecurityRequirement(
                         name = "bearerAuth"
@@ -37,6 +32,6 @@ import org.springframework.context.annotation.Configuration;
         }
 
 )
-@Configuration
-public class SwaggerConfig {
+//@Configuration
+public class SwaggerProdConfig {
 }

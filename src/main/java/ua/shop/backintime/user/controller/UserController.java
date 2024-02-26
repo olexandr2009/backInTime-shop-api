@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import ua.shop.backintime.config.jwt.UserDetailsImpl;
 import ua.shop.backintime.user.controller.request.UpdateUserRequest;
@@ -56,7 +57,8 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest, Principal principal)
             throws UserNotFoundException, UserAlreadyExistException, UserIncorrectPasswordException {
-        UserDetailsImpl authentication = (UserDetailsImpl) principal;
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        UserDetailsImpl authentication = (UserDetailsImpl) usernamePasswordAuthenticationToken.getPrincipal();
         return ResponseEntity.ok(userMapper.toUserResponse(
                 userService.updateUser(authentication.getId(), userMapper.toUpdateUserDto(updateUserRequest))));
     }
@@ -75,7 +77,7 @@ public class UserController {
                     )
             ),
     })
-    @GetMapping("/find/all")
+    @GetMapping("/test/find/all")
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userMapper.toUserResponses(userService.findAll()));
     }
@@ -97,10 +99,36 @@ public class UserController {
                     description = "User not found"
             )
     })
-    @GetMapping("/find/{email}")
-    public ResponseEntity<UserResponse> findByEmail(@PathVariable String email) {
+    @GetMapping("/test/find")
+    public ResponseEntity<UserResponse> findByEmail(@RequestParam String email) {
         try {
             return ResponseEntity.ok(userMapper.toUserResponse(userService.findByEmail(email)));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @Operation(
+            summary = "Set ofline",
+            description = "Set ofline for email",
+            tags = {"Users"}
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    description = "User found setted ofline",
+                    content = @Content(
+                            schema = @Schema(implementation = List.class),
+                            mediaType = MediaType.APPLICATION_JSON_VALUE
+                    )
+            ),
+            @ApiResponse(responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    @PutMapping("/test/setLoggout")
+    public ResponseEntity<UserResponse> setLoggout(@RequestParam String email) {
+        try {
+            userService.setLoggout(email);
+            return ResponseEntity.ok().build();
         } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
