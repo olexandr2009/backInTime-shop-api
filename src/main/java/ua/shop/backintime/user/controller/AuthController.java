@@ -89,7 +89,6 @@ public class AuthController {
     })
     @PostMapping("/logout")
     public ResponseEntity<?> logout(Principal principal) {
-        System.out.println(principal);
         if (principal == null){
             return ResponseEntity.badRequest().body("User is not logged in");
         }

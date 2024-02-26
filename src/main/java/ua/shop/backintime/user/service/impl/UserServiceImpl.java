@@ -87,22 +87,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public List<UserDto> findAll() {
-        return userMapper.toUserDtos(userRepository.findAll());
-    }
-
-    @Override
-    public UserDto findByEmail(String email) {
-        return userMapper.toUserDto(findUserByEmail(email));
-    }
-    @Override
-    public void setLoggout(String email){
-        UserEntity userEntity = findUserByEmail(email);
-        userEntity.setActiveToken(null);
-        userRepository.save(userEntity);
-    }
-
-    @Override
     public void login(String email, String token) {
         UserEntity userEntity = findUserByEmail(email);
         userEntity.setActiveToken(token);

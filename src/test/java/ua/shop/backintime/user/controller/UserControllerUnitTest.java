@@ -55,12 +55,6 @@ public class UserControllerUnitTest {
                 .andReturn().getResponse().getStatus();
         assertEquals(400, status);
     }
-    @Test
-    @WithMockUser
-    void testFindAll() throws Exception {
-        int status = mvc.perform(get("/api/v1/users/find/all")).andReturn().getResponse().getStatus();
-        assertEquals(200, status);
-    }
     private UpdateUserDto newTestUpdateUserDto() {
         UpdateUserDto updateUserDto = new UpdateUserDto();
         updateUserDto.setOldEmail("old@example.com");
