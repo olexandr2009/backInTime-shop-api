@@ -18,7 +18,6 @@ import ua.shop.backintime.config.jwt.UserDetailsImpl;
 import ua.shop.backintime.user.controller.request.UpdateUserRequest;
 import ua.shop.backintime.user.controller.response.UserResponse;
 import ua.shop.backintime.user.service.UserService;
-import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;

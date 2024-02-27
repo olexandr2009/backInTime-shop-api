@@ -19,11 +19,9 @@ import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
-import ua.shop.backintime.user.service.exception.UserIsOnlineException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.repository.UserRepository;
 import ua.shop.backintime.user.service.UserService;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
@@ -13,9 +12,6 @@ import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

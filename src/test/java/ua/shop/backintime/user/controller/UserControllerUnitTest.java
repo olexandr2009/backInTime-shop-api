@@ -18,7 +18,6 @@ import ua.shop.backintime.user.service.mapper.UserMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @WebMvcTest(UserController.class)
