@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,9 +37,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
-    @Autowired private AuthenticationManager authenticationManager;
-    @Autowired private UserService userService;
-    @Autowired private JwtUtils jwtUtils;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Operation(
             summary = "Login user",
@@ -60,17 +64,17 @@ public class AuthController {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(), loginRequest.getPassword()));
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateJwtToken(authentication);
+
+            userService.login(loginRequest.getEmail(), jwt);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
-
             return ResponseEntity
-                    .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getFirstName(),userDetails.getLastName(), userDetails.getEmail(), roles));
-        } catch (Exception e){
+                    .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getFirstName(), userDetails.getLastName(), userDetails.getEmail(), roles));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -86,10 +90,10 @@ public class AuthController {
     })
     @PostMapping("/logout")
     public ResponseEntity<?> logout(Principal principal) {
-        if (principal == null){
-            return ResponseEntity.badRequest().body("You are not logged yet");
+        if (principal == null) {
+            return ResponseEntity.badRequest().body("User is not logged in");
         }
-        userService.logout(principal);
+        userService.setLoggout(principal.getName());
         return ResponseEntity.ok("Logout success");
     }
 
@@ -100,6 +104,7 @@ public class AuthController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "202"),
+            @ApiResponse(responseCode = "201"),
             @ApiResponse(responseCode = "400", description = "User already exists")
     })
     @PostMapping("/register")
@@ -111,6 +116,6 @@ public class AuthController {
 
 
         userService.registerUser(userDto, signUpRequest.getPassword());
-        return ResponseEntity.accepted().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

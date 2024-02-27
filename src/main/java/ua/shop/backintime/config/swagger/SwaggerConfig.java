@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import org.springframework.context.annotation.Configuration;
 
 @SecurityScheme(
         name = "bearerAuth",
@@ -25,12 +26,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
                         email = "hristevich.ua@gmail.com"
                 )
         ),
-<<<<<<< HEAD:src/main/java/ua/shop/backintime/config/swagger/SwaggerProdConfig.java
-=======
-        servers = @Server(
-                url = "https://back-in-time-shop-api.onrender.com"
-        ),
->>>>>>> 537e4547a1ddea0ae4749a139bfd3aafb9120e86:src/main/java/ua/shop/backintime/config/SwaggerConfig.java
         security = {
                 @SecurityRequirement(
                         name = "bearerAuth"
@@ -38,6 +33,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
         }
 
 )
-//@Configuration
-public class SwaggerProdConfig {
+@Configuration
+public class SwaggerConfig {
 }

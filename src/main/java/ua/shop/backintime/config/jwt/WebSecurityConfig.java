@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,10 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ua.shop.backintime.user.UserRole;
 import ua.shop.backintime.user.service.impl.UserServiceImpl;
 
 
 @Configuration
+@EnableMethodSecurity
 public class WebSecurityConfig {
 
     @Bean
@@ -55,6 +59,8 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        String name = UserRole.TESTER.name();
+        System.out.println(name);
         http.csrf(AbstractHttpConfigurer::disable)
             .cors(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt()))
@@ -63,11 +69,11 @@ public class WebSecurityConfig {
                         auth
                                 .requestMatchers(
                                         "/api/v1/auth/**",
-                                        "/api/v1/users/test/**",
                                         "/v3/api-docs",
                                         "/swagger-ui.html",
                                         "/swagger-ui/**",
-                                        "/swagger-resources/**").permitAll()
+                                        "/swagger-resources/**"
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 );
 

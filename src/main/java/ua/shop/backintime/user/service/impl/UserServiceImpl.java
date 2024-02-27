@@ -34,10 +34,14 @@ import java.util.Set;
 @Primary
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private RoleRepository roleRepository;
-    @Autowired private PasswordEncoder encoder;
-    @Autowired private UserMapper userMapper;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder encoder;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     @Transactional
@@ -45,22 +49,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
 
-        checkIsUserOnlineNow(user);
         user.setLastLoginDateTime(LocalDateTime.now());
 
         return UserDetailsImpl.build(user);
-    }
-    private void checkIsUserOnlineNow(UserEntity user) {
-        LocalDateTime lastLoginDateTime = user.getLastLoginDateTime();
-        if (lastLoginDateTime == null){
-            return;
-        }
-
-        boolean isOnlineNow = lastLoginDateTime.plusMinutes(10).isAfter(LocalDateTime.now());
-
-        if (isOnlineNow) {
-            throw new UserIsOnlineException(user.getEmail());
-        }
     }
 
     @Override
@@ -79,7 +70,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private UserEntity mapUserDto(UserDto userDto, String password) {
-        return new UserEntity(userDto.getFirstName(),userDto.getLastName(),userDto.getEmail(), encoder.encode(password));
+        return new UserEntity(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), encoder.encode(password));
     }
 
     @Override
@@ -95,6 +86,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             user.setEmail(updateUserDto.getNewEmail());
             user.setPassword(encoder.encode(updateUserDto.getNewPassword()));
             user.setLastUpdatedDate(LocalDate.now());
+            user.setActiveToken(null);
             return userMapper.toUserDto(userRepository.save(user));
         } else {
             throw new UserIncorrectPasswordException(updateUserDto.getOldEmail());
@@ -102,10 +94,46 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void logout(Principal principal) {
-        UserEntity userEntity = userRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new UserNotFoundException(principal.getName()));
-        userEntity.setLastLoginDateTime(null);
+    public List<UserDto> findAll() {
+        return userMapper.toUserDtos(userRepository.findAll());
+    }
+
+    @Override
+    public UserDto findByEmail(String email) {
+        return userMapper.toUserDto(findUserByEmail(email));
+    }
+
+    @Override
+    public void setLoggout(String email) {
+        UserEntity userEntity = findUserByEmail(email);
+        userEntity.setActiveToken(null);
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public void login(String email, String token) {
+        UserEntity userEntity = findUserByEmail(email);
+        userEntity.setActiveToken(token);
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public boolean canLogin(String email, String token) {
+        try {
+            UserEntity user = findUserByEmail(email);
+
+            if (!user.getLastLoginDateTime().plusDays(1).isAfter(LocalDateTime.now())) {
+                user.setActiveToken(null);
+            }
+
+            return token.equals(user.getActiveToken());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private UserEntity findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 }
