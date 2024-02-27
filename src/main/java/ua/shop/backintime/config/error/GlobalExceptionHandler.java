@@ -1,4 +1,4 @@
-package ua.shop.backintime.config;
+package ua.shop.backintime.config.error;
 
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -30,7 +28,7 @@ public class GlobalExceptionHandler {
                     if (result.containsKey(e.getField())) {
                         result.get(e.getField()).add(e.getDefaultMessage());
                     } else {
-                        result.put(e.getField(), asList(e.getDefaultMessage()));
+                        result.put(e.getField(), Collections.singletonList(e.getDefaultMessage()));
                     }
                 });
         return new ResponseEntity<>(getErrorsMap(result), new HttpHeaders(), HttpStatus.BAD_REQUEST);
@@ -40,7 +38,7 @@ public class GlobalExceptionHandler {
             NoteNotFoundException.class,
             UserNotFoundException.class
     })
-    public ResponseEntity<Map<String, List<String>>> noteNotFoundException(Exception ex) {
+    public ResponseEntity<Map<String, List<String>>> notFoundException(Exception ex) {
         return getErrorsMap(ex, HttpStatus.NOT_FOUND);
     }
 

@@ -63,7 +63,7 @@ public class WebSecurityConfig {
                         auth
                                 .requestMatchers(
                                         "/api/v1/auth/**",
-                                        "/api/v1/users/find/**",
+                                        "/api/v1/users/test/**",
                                         "/v3/api-docs",
                                         "/swagger-ui.html",
                                         "/swagger-ui/**",
