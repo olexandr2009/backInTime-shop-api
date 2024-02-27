@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS user_roles (
     CONSTRAINT role_user_fk FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
-INSERT INTO roles (name) VALUES ('ADMIN'),('AUTH_USER'), ('USER');
+INSERT INTO roles (name) VALUES ('ROLE_ADMIN'),('ROLE_TESTER'), ('ROLE_USER');

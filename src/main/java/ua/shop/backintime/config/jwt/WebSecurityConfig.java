@@ -58,7 +58,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        String name = UserRole.TESTER.name();
+        String name = UserRole.ROLE_TESTER.name();
         System.out.println(name);
         http.csrf(AbstractHttpConfigurer::disable)
             .cors(AbstractHttpConfigurer::disable)

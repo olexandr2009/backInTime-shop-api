@@ -39,8 +39,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (Objects.nonNull(jwt) && jwtUtils.validateJwtToken(jwt)) {
                 String email = jwtUtils.getUserEmailFromJwtToken(jwt);
 
+                System.out.println(email);
+                System.out.println(jwt);
                 if (!userService.canLogin(email, jwt)){
-                    throw new AccessDeniedException("Active token is another fro you");
+                    throw new AccessDeniedException("Active token is another for you");
                 }
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);

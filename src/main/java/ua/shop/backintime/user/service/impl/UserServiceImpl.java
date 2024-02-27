@@ -24,7 +24,7 @@ import ua.shop.backintime.user.service.mapper.UserMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
 
         UserEntity user = mapUserDto(userDto, password);
-        Set<RoleEntity> roleEntities = roleRepository.findByNames(Collections.singleton(UserRole.USER));
+        Set<RoleEntity> roleEntities = roleRepository.findByNames(List.of(UserRole.ROLE_USER));
         user.setRoles(roleEntities);
         user.setLastUpdatedDate(LocalDate.now());
         user.setCreatedDate(LocalDate.now());
@@ -122,6 +122,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
             if (!user.getLastLoginDateTime().plusDays(1).isAfter(LocalDateTime.now())) {
                 user.setActiveToken(null);
+            }
+            if (user.getActiveToken() == null) {
+                return false;
             }
 
             return token.equals(user.getActiveToken());
