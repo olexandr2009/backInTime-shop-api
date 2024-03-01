@@ -47,7 +47,7 @@ public class UserController {
 
     @Operation(
             summary = "Find all users",
-            description = "Find all users",
+            description = "Find all users only for testers",
             tags = {"Users"}
     )
     @ApiResponses({
@@ -60,14 +60,14 @@ public class UserController {
             ),
     })
     @GetMapping("/test/find/all")
-    @PreAuthorize("hasRole('TESTER')")
+//    @PreAuthorize("hasRole('TESTER')")
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userMapper.toUserResponses(userService.findAll()));
     }
 
     @Operation(
             summary = "Find by email",
-            description = "Find by email",
+            description = "Find by email only for testers",
             tags = {"Users"}
     )
     @ApiResponses({
@@ -94,7 +94,7 @@ public class UserController {
 
     @Operation(
             summary = "Set ofline",
-            description = "Set ofline for email",
+            description = "Set ofline for email only for testers",
             tags = {"Users"}
     )
     @ApiResponses({
