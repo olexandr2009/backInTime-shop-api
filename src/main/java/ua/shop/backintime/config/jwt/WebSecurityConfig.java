@@ -21,7 +21,7 @@ import ua.shop.backintime.user.service.impl.UserServiceImpl;
 
 @Configuration
 @EnableMethodSecurity
-@Profile("security")
+//@Profile("security")
 public class WebSecurityConfig {
 
     @Bean
@@ -60,8 +60,6 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        String name = UserRole.ROLE_TESTER.name();
-        System.out.println(name);
         http.csrf(AbstractHttpConfigurer::disable)
             .cors(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt()))
@@ -75,7 +73,8 @@ public class WebSecurityConfig {
                                         "/swagger-ui/**",
                                         "/swagger-resources/**"
                                 ).permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
+//                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
