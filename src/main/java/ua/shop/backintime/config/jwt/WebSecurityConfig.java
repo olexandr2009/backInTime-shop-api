@@ -21,7 +21,6 @@ import ua.shop.backintime.user.service.impl.UserServiceImpl;
 
 @Configuration
 @EnableMethodSecurity
-//@Profile("security")
 public class WebSecurityConfig {
 
     @Bean
