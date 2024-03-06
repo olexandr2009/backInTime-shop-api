@@ -24,7 +24,6 @@ import ua.shop.backintime.user.service.mapper.UserMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 

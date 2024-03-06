@@ -1,20 +1,16 @@
 package ua.shop.backintime.user.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ua.shop.backintime.config.jwt.UserDetailsImpl;
 import ua.shop.backintime.user.controller.request.UpdateUserRequest;
 import ua.shop.backintime.user.controller.response.UserResponse;
@@ -25,7 +21,6 @@ import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 
 import java.security.Principal;
-import java.util.List;
 
 @Slf4j
 @Tag(name = "Users", description = "User controller to manage usernames, passwords and roles")

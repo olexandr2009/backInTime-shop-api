@@ -2,7 +2,6 @@ package ua.shop.backintime.config.jwt;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -15,7 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ua.shop.backintime.user.UserRole;
+import org.springframework.web.filter.CorsFilter;
+import ua.shop.backintime.config.CorsConfigFilter;
 import ua.shop.backintime.user.service.impl.UserServiceImpl;
 
 
@@ -37,6 +37,11 @@ public class WebSecurityConfig {
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
+    @Bean
+    public CorsConfigFilter corsConfigFilter(){
+        return new CorsConfigFilter();
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -60,26 +65,43 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-            .cors(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers(
-                                        "/api/v1/auth/**",
-                                        "/v3/api-docs",
-                                        "/swagger-ui.html",
-                                        "/swagger-ui/**",
-                                        "/swagger-resources/**"
-                                ).permitAll()
-                                .anyRequest().permitAll()
+                                auth
+                                        .requestMatchers(
+                                                "/api/v1/auth/**",
+                                                "/v3/api-docs",
+                                                "/swagger-ui.html",
+                                                "/swagger-ui/**",
+                                                "/swagger-resources/**"
+                                        ).permitAll()
+                                        .anyRequest().permitAll()
 //                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(corsConfigFilter(), CorsFilter.class);
 
         return http.build();
     }
+
+    // To enable CORS
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        final CorsConfiguration configuration = new CorsConfiguration();
+//
+////        configuration.setAllowedOrigins(List.of("https://www.yourdomain.com")); // www - obligatory
+//        configuration.setAllowedOrigins(List.of("*"));  //set access from all domains
+//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+//        configuration.setAllowCredentials(true);
+//        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//
+//        return source;
+//    }
 }
