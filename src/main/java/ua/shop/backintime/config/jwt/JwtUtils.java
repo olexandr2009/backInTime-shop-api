@@ -15,10 +15,10 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class JwtUtils {
-    @Value("${demo.app.jwtSecret}")
+    @Value("${demo.app.jwtSecret:secretKey}")
     private String jwtSecret;
 
-    @Value("${demo.app.jwtExpirationMs}")
+    @Value("${demo.app.jwtExpirationMs:86400000}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
