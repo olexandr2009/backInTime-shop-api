@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import ua.shop.backintime.config.CorsConfigFilter;
 import ua.shop.backintime.user.service.impl.UserServiceImpl;
 
 import java.util.Arrays;
@@ -43,10 +42,6 @@ public class WebSecurityConfig {
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
-    }
-    @Bean
-    public CorsConfigFilter corsConfigFilter(){
-        return new CorsConfigFilter();
     }
 
     @Bean
@@ -90,7 +85,6 @@ public class WebSecurityConfig {
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(corsConfigFilter(), CorsFilter.class);
 
         return http.build();
     }
