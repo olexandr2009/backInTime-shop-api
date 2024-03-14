@@ -47,7 +47,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void testRegisterUser() {
-        assertEquals(ResponseEntity.accepted().build(), authController.registerUser(
+        assertEquals(new ResponseEntity<>(HttpStatus.CREATED), authController.registerUser(
                 createTestSignUpRequest()));
     }
 
