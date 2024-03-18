@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: dark24kot776/backintimeshopapi:1.7
+    image: dark24kot776/backintimeshopapi:1.8
     build:
       context: .
       dockerfile: Dockerfile
