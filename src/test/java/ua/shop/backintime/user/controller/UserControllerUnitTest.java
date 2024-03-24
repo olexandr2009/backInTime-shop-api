@@ -28,8 +28,6 @@ public class UserControllerUnitTest {
     @MockBean
     private UserMapper userMapper;
     @Autowired
-    private UserController controller;
-    @Autowired
     private MockMvc mvc;
 
     @BeforeEach

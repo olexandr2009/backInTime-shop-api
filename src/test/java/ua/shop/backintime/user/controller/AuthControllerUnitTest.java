@@ -7,6 +7,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -71,7 +72,7 @@ public class AuthControllerUnitTest {
         doNothing().when(userService).registerUser(any(), anyString());
 
         SignupRequest signUpRequest = createTestSignUpRequest();
-        assertEquals(ResponseEntity.accepted().build(), authController.registerUser(signUpRequest));
+        assertEquals(new ResponseEntity<>(HttpStatus.CREATED), authController.registerUser(signUpRequest));
     }
     private LoginRequest createTestLoginRequest() {
         LoginRequest loginRequest = new LoginRequest();

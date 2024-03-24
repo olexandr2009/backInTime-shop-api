@@ -26,7 +26,7 @@ import java.security.Principal;
 @Tag(name = "Users", description = "User controller to manage usernames, passwords and roles")
 @RestController
 @RequestMapping(path = "/api/v1/users")
-@Profile("prod")
+@Profile({"prod", "default"})
 public class UserController {
     @Autowired
     private UserService userService;

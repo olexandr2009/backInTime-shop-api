@@ -31,7 +31,7 @@ import java.util.List;
 @Tag(name = "Users", description = "User controller to manage usernames, passwords and roles")
 @RestController
 @RequestMapping(path = "/api/v1/users")
-@Profile("test")
+@Profile({"test","dev"})
 public class UserTesterController {
     @Autowired
     private UserService userService;
