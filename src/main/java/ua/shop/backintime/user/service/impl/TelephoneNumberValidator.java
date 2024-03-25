@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+//@Service
 public class TelephoneNumberValidator {
     @Value("${demo.app.telephoneCheck.api.key}")
     private String TELEPHONE_API_KEY;
