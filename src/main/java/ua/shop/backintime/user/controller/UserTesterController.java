@@ -62,7 +62,7 @@ public class UserTesterController {
             ),
     })
     @GetMapping("/test/find/all")
-//    @PreAuthorize("hasRole('TESTER')")
+    @PreAuthorize("hasRole('TESTER')")
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userMapper.toUserResponses(userService.findAll()));
     }
