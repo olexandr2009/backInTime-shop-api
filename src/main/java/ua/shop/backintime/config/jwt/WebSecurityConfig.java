@@ -78,8 +78,7 @@ public class WebSecurityConfig {
                                                 "/swagger-ui/**",
                                                 "/swagger-resources/**"
                                         ).permitAll()
-                                        .anyRequest().permitAll()
-//                                .anyRequest().authenticated()
+                                        .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
@@ -89,22 +88,6 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    // To enable CORS
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        final CorsConfiguration configuration = new CorsConfiguration();
-//
-////        configuration.setAllowedOrigins(List.of("https://www.yourdomain.com")); // www - obligatory
-//        configuration.setAllowedOrigins(List.of("*"));  //set access from all domains
-//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//
-//        return source;
-//    }
     private static final Long MAX_AGE = 3600L;
     private static final int CORS_FILTER_ORDER = -102;
 
@@ -120,7 +103,7 @@ public class WebSecurityConfig {
         return bean.getFilter();
     }
 
-    private static CorsConfiguration corsConfiguration() {
+    private CorsConfiguration corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("*");
         config.setAllowedHeaders(Arrays.asList(

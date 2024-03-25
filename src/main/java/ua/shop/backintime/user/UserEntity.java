@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ua.shop.backintime.user.service.dto.DataForSending;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Setter
     private String activeToken;
@@ -38,6 +39,21 @@ public class UserEntity {
     @Setter
     private String password;
 
+    @NotBlank
+    @Setter
+    @Column(name = "telephone_number")
+    private String telephoneNumber;
+
+    @NotBlank
+    @Setter
+    @Column(name = "city_name")
+    private String cityName;
+
+    @NotBlank
+    @Setter
+    @Column(name = "NP_department")
+    private String NPdepartment;
+
     @Setter
     private LocalDateTime lastLoginDateTime = LocalDateTime.now();
 
@@ -53,8 +69,8 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    public UserEntity(String firstName, String lastName, String email, String password) {
-        if (firstName == null || lastName == null ||email == null || password == null){
+    public UserEntity(String firstName, String lastName, String email, String password, DataForSending dataForSending) {
+        if (firstName == null || lastName == null || email == null || password == null) {
             throw new NullPointerException(
                     "Cannot create user entity firstname=%s , lastname=%s,email =%s, password=%s"
                             .formatted(firstName, lastName, email, password));
@@ -63,15 +79,19 @@ public class UserEntity {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.cityName = dataForSending.getCityName();
+        this.NPdepartment = dataForSending.getNPdepartment();
+        this.telephoneNumber = dataForSending.getTelephoneNumber();
         checkPassword(password);
         this.password = password;
     }
+
     private void checkPassword(String password) {
         if (password.length() < 8) {
             throw new RuntimeException("Password is incorect" + password);
 
         }
-        if (password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")){
+        if (password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
             return;
         }
         throw new RuntimeException("Password is incorect " + password);

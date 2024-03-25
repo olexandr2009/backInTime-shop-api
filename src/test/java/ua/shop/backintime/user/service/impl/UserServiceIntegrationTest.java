@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.shop.backintime.user.repository.UserRepository;
 import ua.shop.backintime.user.service.UserService;
+import ua.shop.backintime.user.service.dto.DataForSending;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
@@ -77,6 +78,7 @@ public class UserServiceIntegrationTest {
         userDto.setFirstName("firstName");
         userDto.setLastName("lastName");
         userDto.setEmail(email);
+        userDto.setDataForSending(new DataForSending("telephoneNumber","cityName","NPdepartment"));
         return userDto;
     }
 

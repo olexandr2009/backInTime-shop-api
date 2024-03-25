@@ -37,3 +37,9 @@ demo:
   app:
     jwtSecret: ======================SecretWordForJwt===========================
     jwtExpirationMs: 86400000
+    telephoneCheck:
+      api:
+        key: n2K1R83wSYf3cblpJlSH75ASQlAfzqNB
+    emailCheck:
+      api:
+        key: VOHF6kDhhwk9UhtwIbpZ4OWc9iEgIr9m

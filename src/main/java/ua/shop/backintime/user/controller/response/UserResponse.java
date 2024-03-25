@@ -3,6 +3,7 @@ package ua.shop.backintime.user.controller.response;
 import lombok.Getter;
 import lombok.Setter;
 import ua.shop.backintime.user.UserRole;
+import ua.shop.backintime.user.service.dto.DataForSending;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String email;
+    private DataForSending dataForSending;
     private LocalDate lastUpdatedDate;
     private LocalDate createdDate;
     private Set<UserRole> roles = new HashSet<>();

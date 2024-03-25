@@ -15,6 +15,7 @@ import ua.shop.backintime.user.UserRole;
 import ua.shop.backintime.user.repository.RoleRepository;
 import ua.shop.backintime.user.repository.UserRepository;
 import ua.shop.backintime.user.service.UserService;
+import ua.shop.backintime.user.service.dto.DataForSending;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
@@ -60,6 +61,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         UserEntity user = mapUserDto(userDto, password);
         Set<RoleEntity> roleEntities = roleRepository.findByNames(List.of(UserRole.ROLE_USER));
+        DataForSending dataForSending = userDto.getDataForSending();
+        user.setNPdepartment(dataForSending.getNPdepartment());
+        user.setCityName(dataForSending.getCityName());
+        user.setTelephoneNumber(dataForSending.getTelephoneNumber());
         user.setRoles(roleEntities);
         user.setLastUpdatedDate(LocalDate.now());
         user.setCreatedDate(LocalDate.now());
@@ -67,7 +72,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private UserEntity mapUserDto(UserDto userDto, String password) {
-        return new UserEntity(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), encoder.encode(password));
+        return new UserEntity(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), encoder.encode(password), userDto.getDataForSending());
     }
 
     @Override

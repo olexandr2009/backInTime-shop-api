@@ -37,3 +37,9 @@ demo:
   app:
     jwtSecret: ======================SecretWordForJwt===========================
     jwtExpirationMs: 86400000
+    telephoneCheck:
+      api:
+        key: ${IPQS_PHONE_API_KEY}
+    emailCheck:
+      api:
+        key: ${IPQS_EMAIL_API_KEY}

@@ -19,6 +19,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
+    private DataForSending dataForSending;
     private LocalDate lastUpdatedDate;
     private LocalDate createdDate;
     private Set<UserRole> roles = new HashSet<>();
