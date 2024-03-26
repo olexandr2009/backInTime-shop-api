@@ -62,7 +62,6 @@ public class UserTesterController {
             ),
     })
     @GetMapping("/test/find/all")
-    @PreAuthorize("hasRole('TESTER')")
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userMapper.toUserResponses(userService.findAll()));
     }
@@ -85,7 +84,6 @@ public class UserTesterController {
             )
     })
     @GetMapping("/test/find")
-    @PreAuthorize("hasRole('TESTER')")
     public ResponseEntity<UserResponse> findByEmail(@RequestParam String email) {
         try {
             return ResponseEntity.ok(userMapper.toUserResponse(userService.findByEmail(email)));
@@ -112,7 +110,6 @@ public class UserTesterController {
             )
     })
     @PutMapping("/test/setLoggout")
-    @PreAuthorize("hasRole('TESTER')")
     public ResponseEntity<UserResponse> setLoggout(@RequestParam String email) {
         try {
             userService.setLoggout(email);
