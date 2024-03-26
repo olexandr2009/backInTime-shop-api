@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import ua.shop.backintime.config.jwt.UserDetailsImpl;
@@ -31,7 +30,7 @@ import java.util.List;
 @Tag(name = "Users", description = "User controller to manage usernames, passwords and roles")
 @RestController
 @RequestMapping(path = "/api/v1/users")
-@Profile({"test","dev"})
+@Profile({"test", "dev"})
 public class UserTesterController {
     @Autowired
     private UserService userService;
