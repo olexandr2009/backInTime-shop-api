@@ -43,5 +43,10 @@ jobs:
           context: .
           push: true
           tags: dark24kot776/backintimeshopapi:1.9
+      - name: Deploy
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl "$deploy_url"
 
 
