@@ -27,6 +27,5 @@ public class SignupRequest {
     @Size(min = 8, max = 100)
     private String password;
 
-    @NotBlank
     private DataForSending dataForSending;
 }
