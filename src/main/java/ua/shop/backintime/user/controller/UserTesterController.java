@@ -29,22 +29,13 @@ import java.util.List;
 @Slf4j
 @Tag(name = "Users", description = "User controller to manage usernames, passwords and roles")
 @RestController
-@RequestMapping(path = "/api/v1/users")
+@RequestMapping(path = "/api/v1/test/users")
 @Profile({"test", "dev"})
 public class UserTesterController {
     @Autowired
     private UserService userService;
     @Autowired
     private UserMapper userMapper;
-
-    @PutMapping("/update")
-    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest, Principal principal)
-            throws UserNotFoundException, UserAlreadyExistException, UserIncorrectPasswordException {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) principal;
-        UserDetailsImpl authentication = (UserDetailsImpl) usernamePasswordAuthenticationToken.getPrincipal();
-        return ResponseEntity.ok(userMapper.toUserResponse(
-                userService.updateUser(authentication.getId(), userMapper.toUpdateUserDto(updateUserRequest))));
-    }
 
     @Operation(
             summary = "Find all users",
@@ -60,7 +51,7 @@ public class UserTesterController {
                     )
             ),
     })
-    @GetMapping("/test/find/all")
+    @GetMapping("/find/all")
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userMapper.toUserResponses(userService.findAll()));
     }
@@ -82,7 +73,7 @@ public class UserTesterController {
                     description = "User not found"
             )
     })
-    @GetMapping("/test/find")
+    @GetMapping("/find")
     public ResponseEntity<UserResponse> findByEmail(@RequestParam String email) {
         try {
             return ResponseEntity.ok(userMapper.toUserResponse(userService.findByEmail(email)));
@@ -108,8 +99,8 @@ public class UserTesterController {
                     description = "User not found"
             )
     })
-    @PutMapping("/test/setLoggout")
-    public ResponseEntity<UserResponse> setLoggout(@RequestParam String email) {
+    @PutMapping("/setOfline")
+    public ResponseEntity<UserResponse> setOfline(@RequestParam String email) {
         try {
             userService.setLoggout(email);
             return ResponseEntity.ok().build();
