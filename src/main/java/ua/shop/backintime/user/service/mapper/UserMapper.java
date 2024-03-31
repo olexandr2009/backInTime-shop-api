@@ -5,7 +5,7 @@ import ua.shop.backintime.user.RoleEntity;
 import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.controller.request.UpdateUserRequest;
 import ua.shop.backintime.user.controller.response.UserResponse;
-import ua.shop.backintime.user.service.dto.DataForSending;
+import ua.shop.backintime.user.service.dto.DataForDelivery;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 
@@ -21,7 +21,7 @@ public class UserMapper {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
-        dto.setDataForSending(new DataForSending(user.getTelephoneNumber(), user.getCityName(), user.getNPdepartment()));
+        dto.setDataForDelivery(new DataForDelivery(user.getTelephoneNumber(), user.getCityName(), user.getNPdepartment()));
         dto.setLastUpdatedDate(user.getLastUpdatedDate());
         dto.setCreatedDate(user.getCreatedDate());
         dto.setRoles(user.getRoles().stream()
@@ -44,7 +44,7 @@ public class UserMapper {
         response.setFirstName(dto.getFirstName());
         response.setLastName(dto.getLastName());
         response.setEmail(dto.getEmail());
-        response.setDataForSending(dto.getDataForSending());
+        response.setDataForDelivery(dto.getDataForDelivery());
         response.setLastUpdatedDate(dto.getLastUpdatedDate());
         response.setCreatedDate(dto.getCreatedDate());
         response.setRoles(dto.getRoles());

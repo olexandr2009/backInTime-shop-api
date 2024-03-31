@@ -15,13 +15,15 @@ import ua.shop.backintime.user.UserRole;
 import ua.shop.backintime.user.repository.RoleRepository;
 import ua.shop.backintime.user.repository.UserRepository;
 import ua.shop.backintime.user.service.UserService;
-import ua.shop.backintime.user.service.dto.DataForSending;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
+import ua.shop.backintime.user.service.validator.EmailValidator;
+import ua.shop.backintime.user.service.validator.PasswordValidator;
+import ua.shop.backintime.user.service.validator.TelephoneNumberValidator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +42,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private PasswordEncoder encoder;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private EmailValidator emailValidator;
+    @Autowired
+    private TelephoneNumberValidator telephoneNumberValidator;
+    @Autowired
+    private PasswordValidator passwordValidator;
 
     @Override
     @Transactional
@@ -59,20 +67,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new UserAlreadyExistException(userDto);
         }
 
-        UserEntity user = mapUserDto(userDto, password);
+        UserEntity user = new UserEntity(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), encoder.encode(password));
         Set<RoleEntity> roleEntities = roleRepository.findByNames(List.of(UserRole.ROLE_USER));
-        DataForSending dataForSending = userDto.getDataForSending();
-        user.setNPdepartment(dataForSending.getNPdepartment());
-        user.setCityName(dataForSending.getCityName());
-        user.setTelephoneNumber(dataForSending.getTelephoneNumber());
         user.setRoles(roleEntities);
         user.setLastUpdatedDate(LocalDate.now());
         user.setCreatedDate(LocalDate.now());
         userRepository.save(user);
-    }
-
-    private UserEntity mapUserDto(UserDto userDto, String password) {
-        return new UserEntity(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), encoder.encode(password), userDto.getDataForSending());
     }
 
     @Override
@@ -135,6 +135,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public void deleteUserByEmail(String email) {
+        userRepository.deleteByEmail(email);
     }
 
     private UserEntity findUserByEmail(String email) {

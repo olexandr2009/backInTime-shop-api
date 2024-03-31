@@ -23,4 +23,6 @@ public interface UserService {
     void login(String email, String token);
 
     boolean canLogin(String email, String jwt);
+
+    void deleteUserByEmail(String email);
 }

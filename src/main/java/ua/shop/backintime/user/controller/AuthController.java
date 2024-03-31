@@ -113,7 +113,6 @@ public class AuthController {
         userDto.setEmail(signUpRequest.getEmail());
         userDto.setFirstName(signUpRequest.getFirstName());
         userDto.setLastName(signUpRequest.getLastName());
-        userDto.setDataForSending(signUpRequest.getDataForSending());
 
 
         userService.registerUser(userDto, signUpRequest.getPassword());

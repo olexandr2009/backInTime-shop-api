@@ -39,7 +39,7 @@ demo:
     jwtExpirationMs: 86400000
     telephoneCheck:
       api:
-        key:  ${IPQS_PHONE_API_KEY}
+        key: n2K1R83wSYf3cblpJlSH75ASQlAfzqNB
     emailCheck:
       api:
-        key: ${IPQS_EMAIL_API_KEY}
+        key: 634070a3b60e4bb1a1ee6e841993df42

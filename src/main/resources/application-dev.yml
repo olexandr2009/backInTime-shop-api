@@ -23,10 +23,6 @@ springdoc:
 server:
   port: 80
 
-# JWT Configuration
-jwt:
-  secret: ${JWT_SECRET:your_prod_secret_key}
-  expiration-time: ${JWT_EXPIRATION_TIME:86400000}
 logging:
   level:
     org:
@@ -42,4 +38,4 @@ demo:
         key: n2K1R83wSYf3cblpJlSH75ASQlAfzqNB
     emailCheck:
       api:
-        key: VOHF6kDhhwk9UhtwIbpZ4OWc9iEgIr9m
+        key: 634070a3b60e4bb1a1ee6e841993df42

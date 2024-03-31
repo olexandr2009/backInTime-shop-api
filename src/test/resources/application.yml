@@ -3,12 +3,20 @@ spring:
     url: jdbc:tc:postgresql:alpine://testDb
   jpa:
     show-sql: true
+
 logging:
   level:
     org:
       springframework:
         security: DEBUG
+
 demo:
   app:
     jwtSecret: ======================SecretWordForJwt===========================
     jwtExpirationMs: 86400000
+    telephoneCheck:
+      api:
+        key: b77b2075499241559fe804d5caf93ce9
+    emailCheck:
+      api:
+        key: 634070a3b60e4bb1a1ee6e841993df42

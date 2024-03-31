@@ -6,24 +6,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import ua.shop.backintime.config.jwt.UserDetailsImpl;
-import ua.shop.backintime.user.controller.request.UpdateUserRequest;
 import ua.shop.backintime.user.controller.response.UserResponse;
 import ua.shop.backintime.user.service.UserService;
-import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
-import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 
-import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -103,6 +96,32 @@ public class UserTesterController {
     public ResponseEntity<UserResponse> setOfline(@RequestParam String email) {
         try {
             userService.setLoggout(email);
+            return ResponseEntity.ok().build();
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @Operation(
+            summary = "Delete User",
+            description = "Delete User",
+            tags = {"Users"}
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    description = "User found deleted successfully",
+                    content = @Content(
+                            schema = @Schema(implementation = List.class),
+                            mediaType = MediaType.APPLICATION_JSON_VALUE
+                    )
+            ),
+            @ApiResponse(responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    @DeleteMapping("/delete")
+    public ResponseEntity<UserResponse> delete(@RequestParam String email) {
+        try {
+            userService.deleteUserByEmail(email);
             return ResponseEntity.ok().build();
         } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
