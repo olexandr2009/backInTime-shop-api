@@ -1,5 +1,6 @@
 package ua.shop.backintime.user.service;
 
+import ua.shop.backintime.user.controller.request.DeliveryData;
 import ua.shop.backintime.user.service.dto.UpdateUserDto;
 import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
@@ -25,4 +26,8 @@ public interface UserService {
     boolean canLogin(String email, String jwt);
 
     void deleteUserByEmail(String email);
+
+    void deleteAllUsers();
+
+     UserDto addDeliveryData(String email, DeliveryData deliveryData);
 }

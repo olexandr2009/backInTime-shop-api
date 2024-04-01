@@ -6,16 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.shop.backintime.config.jwt.UserDetailsImpl;
+import ua.shop.backintime.user.controller.request.DeliveryData;
+import ua.shop.backintime.user.controller.request.RestorePasswordRequest;
 import ua.shop.backintime.user.controller.request.UpdateUserRequest;
 import ua.shop.backintime.user.controller.response.UserResponse;
 import ua.shop.backintime.user.service.UserService;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
-import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 
@@ -33,10 +31,21 @@ public class UserController {
 
     @PutMapping("/update")
     public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest, Principal principal)
-            throws UserNotFoundException, UserAlreadyExistException, UserIncorrectPasswordException {
+            throws UserNotFoundException, UserAlreadyExistException {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) principal;
         UserDetailsImpl authentication = (UserDetailsImpl) usernamePasswordAuthenticationToken.getPrincipal();
         return ResponseEntity.ok(userMapper.toUserResponse(
                 userService.updateUser(authentication.getId(), userMapper.toUpdateUserDto(updateUserRequest))));
+    }
+    @PutMapping("/restorePassword")
+    public ResponseEntity<?> restorePassword(@Valid @RequestBody RestorePasswordRequest restorePasswordRequest, Principal principal){
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/addDeliveryData")
+    public ResponseEntity<?> addDeliveryData(@Valid @RequestBody DeliveryData deliveryData, Principal principal)
+            throws UserNotFoundException {
+        return ResponseEntity.ok(userMapper.toUserResponse(
+                userService.addDeliveryData(principal.getName(), deliveryData)));
     }
 }

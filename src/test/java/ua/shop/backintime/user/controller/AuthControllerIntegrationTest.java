@@ -13,7 +13,6 @@ import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.controller.auth.request.LoginRequest;
 import ua.shop.backintime.user.controller.auth.request.SignupRequest;
 import ua.shop.backintime.user.repository.UserRepository;
-import ua.shop.backintime.user.service.dto.UserDto;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 
 import java.time.LocalDate;
@@ -58,7 +57,7 @@ class AuthControllerIntegrationTest {
         entity.setCreatedDate(LocalDate.now());
         entity.setLastUpdatedDate(LocalDate.now());
         userRepository.save(entity);
-        UserDto userDto = new UserDto();
+        ua.shop.backintime.user.service.dto.UserDto userDto = new ua.shop.backintime.user.service.dto.UserDto();
         userDto.setEmail(testEmail);
         assertThrows(UserAlreadyExistException.class,
                 () -> authController.registerUser(createTestSignUpRequest()));

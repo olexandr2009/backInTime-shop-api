@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import ua.shop.backintime.user.UserRole;
+import ua.shop.backintime.user.controller.request.DeliveryData;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class UserDto {
     private String lastName;
     @Email
     private String email;
-    private DataForDelivery dataForDelivery;
+    private DeliveryData deliveryData;
     @Past
     private LocalDate lastUpdatedDate;
     @Past

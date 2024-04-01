@@ -1,4 +1,4 @@
-package ua.shop.backintime.user.service.dto;
+package ua.shop.backintime.user.controller.request;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class DataForDelivery {
+public class DeliveryData {
     @Pattern(regexp = "/+[\\d{10}]")
     private String telephoneNumber;
     @Pattern(regexp = "^[А-ЯҐЄІЇ][а-яєїі]")

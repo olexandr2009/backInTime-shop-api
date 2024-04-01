@@ -108,23 +108,38 @@ public class UserTesterController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200",
-                    description = "User found deleted successfully",
-                    content = @Content(
-                            schema = @Schema(implementation = List.class),
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-                    )
+                    description = "User found deleted successfully"
             ),
             @ApiResponse(responseCode = "404",
                     description = "User not found"
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<UserResponse> delete(@RequestParam String email) {
+    public ResponseEntity<?> delete(@RequestParam String email) {
         try {
             userService.deleteUserByEmail(email);
             return ResponseEntity.ok().build();
         } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+    @Operation(
+            summary = "DeleteAll Users",
+            description = "DeleteAll Users",
+            tags = {"Users"}
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    description = "Users deleted successfully"
+            )
+    })
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<?> deleteAll() {
+        try {
+            userService.deleteAllUsers();
+            return ResponseEntity.ok().build();
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

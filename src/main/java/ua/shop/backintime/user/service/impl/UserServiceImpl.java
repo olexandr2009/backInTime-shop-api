@@ -12,6 +12,7 @@ import ua.shop.backintime.config.jwt.UserDetailsImpl;
 import ua.shop.backintime.user.RoleEntity;
 import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.UserRole;
+import ua.shop.backintime.user.controller.request.DeliveryData;
 import ua.shop.backintime.user.repository.RoleRepository;
 import ua.shop.backintime.user.repository.UserRepository;
 import ua.shop.backintime.user.service.UserService;
@@ -137,9 +138,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
     }
 
+    @Transactional
+    @Override
+    public UserDto addDeliveryData(String email, DeliveryData deliveryData) {
+        UserEntity userEntity = findUserByEmail(email);
+        userEntity.setCityName(deliveryData.getCityName());
+        userEntity.setTelephoneNumber(deliveryData.getTelephoneNumber());
+        userEntity.setNPdepartment(deliveryData.getNPdepartment());
+        return userMapper.toUserDto(userRepository.save(userEntity));
+    }
+
+    @Transactional
     @Override
     public void deleteUserByEmail(String email) {
         userRepository.deleteByEmail(email);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllUsers() {
+        userRepository.deleteAll();
     }
 
     private UserEntity findUserByEmail(String email) {
