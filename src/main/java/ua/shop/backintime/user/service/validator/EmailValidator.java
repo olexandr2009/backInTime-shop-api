@@ -24,9 +24,12 @@ public class EmailValidator {
         try {
             String response = restTemplate.getForObject(url, String.class);
             if (!response.contains("true")) {
-//                throw new EmailInvalidException(email);
+                throw new EmailInvalidException(email);
             }
-        } catch (HttpClientErrorException ignored) {
+        } catch (Exception ignored) {
+            if (ignored instanceof EmailInvalidException) {
+//                throw (EmailInvalidException) ignored;
+            }
         }
         return email;
     }
