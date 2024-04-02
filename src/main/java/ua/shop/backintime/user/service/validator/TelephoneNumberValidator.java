@@ -18,7 +18,7 @@ public class TelephoneNumberValidator {
 
 
     public String validate(String telephoneNumber) {
-        telephoneNumber = xssSanitizerService.sanitize(telephoneNumber);
+//        telephoneNumber = xssSanitizerService.sanitize(telephoneNumber);
 
         String url = "https://phonevalidation.abstractapi.com/v1/?api_key=%s&phone=%s"
                 .formatted(TELEPHONE_API_KEY, telephoneNumber);
