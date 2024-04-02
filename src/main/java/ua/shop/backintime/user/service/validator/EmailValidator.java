@@ -31,7 +31,7 @@ public class EmailValidator {
         return email;
     }
 
-    protected static class EmailInvalidException extends RuntimeException {
+    public static class EmailInvalidException extends RuntimeException {
         public EmailInvalidException(String email) {
             super(String.format("Email %s is invalid", email));
         }

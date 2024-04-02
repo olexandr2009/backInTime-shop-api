@@ -11,6 +11,8 @@ import ua.shop.backintime.user.service.exception.NoteNotFoundException;
 import ua.shop.backintime.user.service.exception.UserAlreadyExistException;
 import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
+import ua.shop.backintime.user.service.validator.EmailValidator;
+import ua.shop.backintime.user.service.validator.TelephoneNumberValidator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,6 +34,13 @@ public class GlobalExceptionHandler {
                     }
                 });
         return new ResponseEntity<>(getErrorsMap(result), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = {
+            EmailValidator.EmailInvalidException.class,
+            TelephoneNumberValidator.TelephoneNumberInvalidException.class
+    })
+    public ResponseEntity<Map<String, List<String>>> handleValidationUnExistingErrors(Exception ex) {
+        return getErrorsMap(ex, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {

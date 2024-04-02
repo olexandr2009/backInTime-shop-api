@@ -33,7 +33,7 @@ public class TelephoneNumberValidator {
         return telephoneNumber;
     }
 
-    protected static class TelephoneNumberInvalidException extends RuntimeException {
+    public static class TelephoneNumberInvalidException extends RuntimeException {
         public TelephoneNumberInvalidException(String telephoneNumber) {
             super(String.format("Telephone number %s is invalid", telephoneNumber));
         }
