@@ -26,7 +26,7 @@ public class TelephoneNumberValidator {
         try {
             String response = restTemplate.getForObject(url, String.class);
             if (!response.contains("\"valid\":true")) {
-                throw new TelephoneNumberInvalidException(telephoneNumber);
+//                throw new TelephoneNumberInvalidException(telephoneNumber);
             }
         } catch (HttpClientErrorException ignored) {
         }
