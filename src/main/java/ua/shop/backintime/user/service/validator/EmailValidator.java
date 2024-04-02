@@ -26,10 +26,8 @@ public class EmailValidator {
             if (!response.contains("true")) {
                 throw new EmailInvalidException(email);
             }
-        } catch (HttpClientErrorException e) {
-            if (!email.contains("@")) {
-                throw new EmailInvalidException(email);
-            }
+        } catch (HttpClientErrorException ignored) {
+
         }
     }
 

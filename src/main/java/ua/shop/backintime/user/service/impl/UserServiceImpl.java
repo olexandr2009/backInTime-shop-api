@@ -64,11 +64,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void registerUser(UserDto userDto, String password) {
-        if (userRepository.existsByEmail(userDto.getEmail())) {
+        String email = userDto.getEmail();
+        emailValidator.validate(email);
+
+        if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistException(userDto);
         }
 
-        UserEntity user = new UserEntity(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), encoder.encode(password));
+        UserEntity user = new UserEntity(userDto.getFirstName(), userDto.getLastName(), email, encoder.encode(password));
         Set<RoleEntity> roleEntities = roleRepository.findByNames(List.of(UserRole.ROLE_USER));
         user.setRoles(roleEntities);
         user.setLastUpdatedDate(LocalDate.now());
@@ -94,23 +97,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         } else {
             throw new UserIncorrectPasswordException(updateUserDto.getOldEmail());
         }
-    }
-
-    @Override
-    public List<UserDto> findAll() {
-        return userMapper.toUserDtos(userRepository.findAll());
-    }
-
-    @Override
-    public UserDto findByEmail(String email) {
-        return userMapper.toUserDto(findUserByEmail(email));
-    }
-
-    @Override
-    public void setLoggout(String email) {
-        UserEntity userEntity = findUserByEmail(email);
-        userEntity.setActiveToken(null);
-        userRepository.save(userEntity);
     }
 
     @Override
@@ -143,11 +129,30 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public UserDto addDeliveryData(String email, DeliveryData deliveryData) {
         UserEntity userEntity = findUserByEmail(email);
         userEntity.setCityName(deliveryData.getCityName());
-        userEntity.setTelephoneNumber(deliveryData.getTelephoneNumber());
+        String telephoneNumber = deliveryData.getTelephoneNumber();
+        telephoneNumberValidator.validate(telephoneNumber);
+        userEntity.setTelephoneNumber(telephoneNumber);
         userEntity.setNPdepartment(deliveryData.getNPdepartment());
         return userMapper.toUserDto(userRepository.save(userEntity));
     }
 
+    @Override
+    public List<UserDto> findAll() {
+        return userMapper.toUserDtos(userRepository.findAll());
+    }
+
+    @Override
+    public UserDto findByEmail(String email) {
+        return userMapper.toUserDto(findUserByEmail(email));
+    }
+
+    @Transactional
+    @Override
+    public void setLoggout(String email) {
+        UserEntity userEntity = findUserByEmail(email);
+        userEntity.setActiveToken(null);
+        userRepository.save(userEntity);
+    }
     @Transactional
     @Override
     public void deleteUserByEmail(String email) {

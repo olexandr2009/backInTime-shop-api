@@ -1,9 +1,6 @@
 package ua.shop.backintime.user.controller.auth.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +9,13 @@ import lombok.Setter;
 public class SignupRequest {
 
     @NotBlank
-    @Size(min = 3, max = 50)
-    @Pattern(regexp = "^[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії']*$")
+    @Size(max = 50)
+    @Pattern(regexp = "^[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії]*(-[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії]*)*$")
     private String firstName;
 
     @NotBlank
-    @Size(min = 3, max = 50)
-    @Pattern(regexp = "^[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії']*$")
+    @Size(max = 50)
+    @Pattern(regexp = "^[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії]*(-[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії]*)*$")
     private String lastName;
 
     @NotBlank

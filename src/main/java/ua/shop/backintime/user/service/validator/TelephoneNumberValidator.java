@@ -28,10 +28,7 @@ public class TelephoneNumberValidator {
             if (!response.contains("\"valid\":true")) {
                 throw new TelephoneNumberInvalidException(telephoneNumber);
             }
-        } catch (HttpClientErrorException e) {
-            if (!telephoneNumber.matches("^(.+)@(\\S+)$")) {
-                throw new TelephoneNumberInvalidException(telephoneNumber);
-            }
+        } catch (HttpClientErrorException ignored) {
         }
     }
 
