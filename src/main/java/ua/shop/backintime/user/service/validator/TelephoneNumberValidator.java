@@ -17,8 +17,8 @@ public class TelephoneNumberValidator {
     private String TELEPHONE_API_KEY;
 
 
-    public void validate(String telephoneNumber) {
-        xssSanitizerService.sanitize(telephoneNumber);
+    public String validate(String telephoneNumber) {
+        telephoneNumber = xssSanitizerService.sanitize(telephoneNumber);
 
         String url = "https://phonevalidation.abstractapi.com/v1/?api_key=%s&phone=%s"
                 .formatted(TELEPHONE_API_KEY, telephoneNumber);
@@ -30,6 +30,7 @@ public class TelephoneNumberValidator {
             }
         } catch (HttpClientErrorException ignored) {
         }
+        return telephoneNumber;
     }
 
     protected static class TelephoneNumberInvalidException extends RuntimeException {

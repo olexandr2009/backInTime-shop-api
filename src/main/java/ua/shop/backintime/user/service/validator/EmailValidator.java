@@ -17,8 +17,8 @@ public class EmailValidator {
     @Value("${demo.app.emailCheck.api.key}")
     private String EMAIL_API_KEY;
 
-    public void validate(String email) {
-        xssSanitizerService.sanitize(email);
+    public String validate(String email) {
+        email = xssSanitizerService.sanitize(email);
 
         String url = "https://emailvalidation.abstractapi.com/v1/?api_key=%s&email=%s".formatted(EMAIL_API_KEY, email);
         try {
@@ -27,8 +27,8 @@ public class EmailValidator {
                 throw new EmailInvalidException(email);
             }
         } catch (HttpClientErrorException ignored) {
-
         }
+        return email;
     }
 
     protected static class EmailInvalidException extends RuntimeException {

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.shop.backintime.config.jwt.UserDetailsImpl;
+import ua.shop.backintime.config.jwt.XssSanitizerService;
 import ua.shop.backintime.user.RoleEntity;
 import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.UserRole;
@@ -23,7 +24,6 @@ import ua.shop.backintime.user.service.exception.UserIncorrectPasswordException;
 import ua.shop.backintime.user.service.exception.UserNotFoundException;
 import ua.shop.backintime.user.service.mapper.UserMapper;
 import ua.shop.backintime.user.service.validator.EmailValidator;
-import ua.shop.backintime.user.service.validator.PasswordValidator;
 import ua.shop.backintime.user.service.validator.TelephoneNumberValidator;
 
 import java.time.LocalDate;
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private TelephoneNumberValidator telephoneNumberValidator;
     @Autowired
-    private PasswordValidator passwordValidator;
+    private XssSanitizerService xssSanitizerService;
 
     @Override
     @Transactional
@@ -64,9 +64,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void registerUser(UserDto userDto, String password) {
-        String email = userDto.getEmail();
-        emailValidator.validate(email);
+        String email = emailValidator.validate(userDto.getEmail());
 
+        userDto = xssSanitizerService.sanitizeObject(userDto);
+
+        xssSanitizerService.sanitize(password);
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistException(userDto);
         }
@@ -83,8 +85,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public UserDto updateUser(Long userId, UpdateUserDto updateUserDto)
             throws UserNotFoundException, UserIncorrectPasswordException, UserAlreadyExistException {
-        UserEntity user = userRepository.findByEmail(updateUserDto.getOldEmail())
-                .orElseThrow(() -> new UserNotFoundException(updateUserDto.getOldEmail()));
+        updateUserDto = xssSanitizerService.sanitizeObject(updateUserDto);
+
+        String oldEmail = updateUserDto.getOldEmail();
+        UserEntity user = userRepository.findByEmail(oldEmail)
+                .orElseThrow(() -> new UserNotFoundException(oldEmail));
         if (userRepository.existsByEmail(updateUserDto.getNewEmail())) {
             throw new UserAlreadyExistException(updateUserDto);
         }
@@ -95,7 +100,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             user.setActiveToken(null);
             return userMapper.toUserDto(userRepository.save(user));
         } else {
-            throw new UserIncorrectPasswordException(updateUserDto.getOldEmail());
+            throw new UserIncorrectPasswordException(oldEmail);
         }
     }
 
@@ -127,10 +132,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     @Override
     public UserDto addDeliveryData(String email, DeliveryData deliveryData) {
+        deliveryData = xssSanitizerService.sanitizeObject(deliveryData);
+
         UserEntity userEntity = findUserByEmail(email);
         userEntity.setCityName(deliveryData.getCityName());
-        String telephoneNumber = deliveryData.getTelephoneNumber();
-        telephoneNumberValidator.validate(telephoneNumber);
+        String telephoneNumber = telephoneNumberValidator.validate(deliveryData.getTelephoneNumber());
         userEntity.setTelephoneNumber(telephoneNumber);
         userEntity.setNPdepartment(deliveryData.getNPdepartment());
         return userMapper.toUserDto(userRepository.save(userEntity));
