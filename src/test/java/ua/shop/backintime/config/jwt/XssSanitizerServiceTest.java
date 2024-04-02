@@ -17,7 +17,7 @@ class XssSanitizerServiceTest {
         XssSanitizerService xssSanitizerService = new XssSanitizerService();
         DeliveryData input = new DeliveryData();
         input.setCityName("<script>alert('xss')</script>Name");
-        input.setNPdepartment("http://example.com");
+        input.setNPdepartment("http://example.com@");
 
         // when
         DeliveryData sanitizedInput = xssSanitizerService.sanitizeObject(input);
@@ -27,7 +27,7 @@ class XssSanitizerServiceTest {
         List<Field> fields = Arrays.stream(sanitizedInput.getClass().getDeclaredFields()).toList();
         Assertions.assertEquals(3, fields.size());
         Assertions.assertEquals("Name", input.getCityName());
-        Assertions.assertEquals("http://example.com", input.getNPdepartment());
+        Assertions.assertEquals("http://example.com@", input.getNPdepartment());
     }
 
 }

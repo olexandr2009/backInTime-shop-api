@@ -27,7 +27,8 @@ public class XssSanitizerService {
                 .forEach(field -> {
                     try {
                         String sanitize = policyFactory.sanitize((String) field.get(input));
-                        field.set(input, sanitize);
+
+                        field.set(input, sanitize.replace("&#64;","@"));
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
