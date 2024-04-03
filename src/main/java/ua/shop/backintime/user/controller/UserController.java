@@ -1,5 +1,6 @@
 package ua.shop.backintime.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,11 @@ public class UserController {
 //        return ResponseEntity.ok().build();
 //    }
 
+    @Operation(
+            summary = "addDeliveryData for user",
+            description = "firstly you need to login than set Authorization and add delivery data",
+            tags = {"Authentication"}
+    )
     @PostMapping("/addDeliveryData")
     public ResponseEntity<?> addDeliveryData(@Valid @RequestBody DeliveryData deliveryData, Principal principal)
             throws UserNotFoundException {

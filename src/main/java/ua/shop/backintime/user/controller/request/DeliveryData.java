@@ -10,10 +10,10 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class DeliveryData {
-    @Pattern(regexp = "/+[\\d{10}]")
+    @Pattern(regexp = "^\\+\\d{12,13}$")
     private String telephoneNumber;
-    @Pattern(regexp = "^[А-ЯҐЄІЇ][а-яєїі]")
+    @Pattern(regexp = "^[А-ЯҐЄІЇ][а-яєїі]*")
     private String cityName;
-    @Pattern(regexp = "^[А-ЯҐЄІЇ][а-яєїі] +\\d")
+    @Pattern(regexp = "^[А-ЯҐЄІЇ][а-яєїі]* \\d")
     private String NPdepartment;
 }
