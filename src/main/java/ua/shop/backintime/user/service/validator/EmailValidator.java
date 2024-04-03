@@ -3,7 +3,6 @@ package ua.shop.backintime.user.service.validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import ua.shop.backintime.config.jwt.XssSanitizerService;
 

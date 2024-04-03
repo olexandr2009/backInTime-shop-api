@@ -17,7 +17,7 @@ public class SignupRequest {
     private String firstName;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(min = 2,max = 50)
     @Pattern(regexp = "^[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії]*(-[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії]*)*$")
     private String lastName;
 

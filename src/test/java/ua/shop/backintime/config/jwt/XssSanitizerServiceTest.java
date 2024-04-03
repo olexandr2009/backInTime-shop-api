@@ -7,7 +7,6 @@ import ua.shop.backintime.user.controller.request.DeliveryData;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 class XssSanitizerServiceTest {
 

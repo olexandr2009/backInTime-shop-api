@@ -37,10 +37,10 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toUserResponse(
                 userService.updateUser(authentication.getId(), userMapper.toUpdateUserDto(updateUserRequest))));
     }
-    @PutMapping("/restorePassword")
-    public ResponseEntity<?> restorePassword(@Valid @RequestBody RestorePasswordRequest restorePasswordRequest, Principal principal){
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/restorePassword")
+//    public ResponseEntity<?> restorePassword(@Valid @RequestBody RestorePasswordRequest restorePasswordRequest, Principal principal){
+//        return ResponseEntity.ok().build();
+//    }
 
     @PostMapping("/addDeliveryData")
     public ResponseEntity<?> addDeliveryData(@Valid @RequestBody DeliveryData deliveryData, Principal principal)

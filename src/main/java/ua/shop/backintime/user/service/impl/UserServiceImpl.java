@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.shop.backintime.config.jwt.UserDetailsImpl;
-import ua.shop.backintime.config.jwt.XssSanitizerService;
 import ua.shop.backintime.user.RoleEntity;
 import ua.shop.backintime.user.UserEntity;
 import ua.shop.backintime.user.UserRole;
@@ -47,8 +46,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private EmailValidator emailValidator;
     @Autowired
     private TelephoneNumberValidator telephoneNumberValidator;
-    @Autowired
-    private XssSanitizerService xssSanitizerService;
 
     @Override
     @Transactional
@@ -66,9 +63,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void registerUser(UserDto userDto, String password) {
         String email = emailValidator.validate(userDto.getEmail());
 
-//        userDto = xssSanitizerService.sanitizeObject(userDto);
-
-//        xssSanitizerService.sanitize(password);
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistException(userDto);
         }
@@ -85,8 +79,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public UserDto updateUser(Long userId, UpdateUserDto updateUserDto)
             throws UserNotFoundException, UserIncorrectPasswordException, UserAlreadyExistException {
-//        updateUserDto = xssSanitizerService.sanitizeObject(updateUserDto);
-
         String oldEmail = updateUserDto.getOldEmail();
         UserEntity user = userRepository.findByEmail(oldEmail)
                 .orElseThrow(() -> new UserNotFoundException(oldEmail));
@@ -132,8 +124,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     @Override
     public UserDto addDeliveryData(String email, DeliveryData deliveryData) {
-//        deliveryData = xssSanitizerService.sanitizeObject(deliveryData);
-
         UserEntity userEntity = findUserByEmail(email);
         userEntity.setCityName(deliveryData.getCityName());
         String telephoneNumber = telephoneNumberValidator.validate(deliveryData.getTelephoneNumber());
